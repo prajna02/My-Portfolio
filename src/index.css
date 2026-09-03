@@ -764,6 +764,64 @@ a {
   font-size: 0.88rem;
 }
 
+.contact-form {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.contact-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.contact-form label:nth-of-type(3),
+.contact-form label:nth-of-type(4),
+.contact-form button,
+.contact-status {
+  grid-column: 1 / -1;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--bg);
+  font: inherit;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.contact-form button {
+  justify-self: start;
+  cursor: pointer;
+}
+
+.contact-form button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.contact-status {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
 /* Footer */
 .footer {
   border-top: 1px solid var(--line);
@@ -834,6 +892,10 @@ a {
 
   .section {
     padding: 64px 0;
+  }
+
+  .contact-form {
+    grid-template-columns: 1fr;
   }
 
     .project-shot {
