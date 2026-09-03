@@ -1,6 +1,7 @@
 import re
 import sqlite3
 from datetime import datetime, timezone
+import os
 from pathlib import Path
 
 from flask import Flask, jsonify, request
@@ -15,6 +16,12 @@ ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
+FIELD_LIMITS = {
+    'name': 100,
+    'email': 254,
+    'subject': 200,
+    'message': 5000,
+}
 
 CORS(app, resources={r'/api/*': {'origins': ALLOWED_ORIGINS}})
 
@@ -58,6 +65,10 @@ def validate_contact(data):
     if missing_fields:
         return f'Missing required fields: {", ".join(missing_fields)}.'
 
+    for field, maximum_length in FIELD_LIMITS.items():
+        if len(data[field].strip()) > maximum_length:
+            return f'{field.capitalize()} must be {maximum_length} characters or fewer.'
+
     if not is_valid_email(data['email'].strip()):
         return 'Please provide a valid email address.'
 
@@ -65,10 +76,7 @@ def validate_contact(data):
 
 @app.get('/')
 def home():
-    return jsonify({
-        'success': True,
-        'message': 'Portfolio backend is running.'
-    })
+    return jsonify({'success': True, 'message': 'Portfolio backend is running.'})
 
 @app.post('/api/contact')
 def create_contact():
@@ -100,31 +108,15 @@ def create_contact():
         return jsonify({'success': False, 'error': 'The message could not be saved.'}), 500
 
 
-@app.get('/api/contact')
-def list_contacts():
-    try:
-        with get_connection() as connection:
-            rows = connection.execute(
-                '''
-                SELECT id, name, email, subject, message, created_at
-                FROM contacts
-                ORDER BY created_at DESC
-                '''
-            ).fetchall()
-        return jsonify([dict(row) for row in rows])
-    except sqlite3.Error:
-        return jsonify({'success': False, 'error': 'The messages could not be loaded.'}), 500
-
-
 @app.errorhandler(Exception)
 def handle_unexpected_error(error):
     if isinstance(error, HTTPException):
         return jsonify({
             'success': False,
-            'error': error.description
-        }), error.code
+            'error': 'The requested resource was not found.'
+            if error.code == 404 else 'The request could not be completed.'
+        }), error.code or 500
 
-    app.logger.exception('Unexpected server error')
     return jsonify({
         'success': False,
         'error': 'An unexpected server error occurred.'
@@ -135,4 +127,5 @@ initialize_database()
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    debug_mode = os.getenv('FLASK_DEBUG', '').lower() in {'1', 'true', 'yes'}
+    app.run(debug=debug_mode, port=5000)
