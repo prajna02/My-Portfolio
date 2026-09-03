@@ -5,7 +5,6 @@ export function Skills() {
     <section className="section" id="skills">
       <div className="container">
         <div className="section-head">
-          <span className="section-index">02</span>
           <h2 className="section-title">Skills</h2>
         </div>
         <div className="skill-grid">

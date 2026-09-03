@@ -5,7 +5,6 @@ export function Education() {
     <section className="section" id="education">
       <div className="container">
         <div className="section-head">
-          <span className="section-index">05</span>
           <h2 className="section-title">Education</h2>
         </div>
         <div className="edu-grid">

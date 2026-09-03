@@ -1,13 +1,13 @@
 export const profile = {
   name: 'Prajna K',
-  headline: 'MCA Graduate | Software Development | AI/ML & Software Testing',
-  bio: 'MCA graduate passionate about building practical software solutions, with hands-on experience in web development, AI/ML, and database technologies.',
+  headline: 'MCA Graduate | Software Developer | AI/ML | QA & Testing',
+  bio: 'Passionate about building practical software solutions and applying technology to solve real-world problems.',
   location: 'Puttur, Karnataka, India',
   email: 'prajnakaniya02@gmail.com',
   linkedin: 'https://linkedin.com/in/prajna-k',
   github: 'https://github.com/prajna02',
   resumePath: '/resume.pdf',
-  photo: '',
+  photo: '/profile.jpeg',
 } as const
 
 export const about = {
@@ -70,6 +70,12 @@ export const projects = [
     ],
     github: 'https://github.com/prajna02/Grocery_Expiry_Tracker',
     live: '',
+    screenshots: [
+    '/project-images/grocery-1.png',
+    '/project-images/grocery-2.png',
+    '/project-images/grocery-3.png',
+    '/project-images/grocery-4.png',
+  ],
     testing:
       'Tested model outputs and application functionality with different inputs and scenarios.',
   },
@@ -82,6 +88,13 @@ export const projects = [
     stack: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'PHP', 'MySQL'],
     github: 'https://github.com/prajna02/FarmEasy',
     live: '',
+    screenshots: [
+  '/project-images/farmeasy-1.png',
+  '/project-images/farmeasy-2.png',
+  '/project-images/farmeasy-3.png',
+  '/project-images/farmeasy-4.png',
+  '/project-images/farmeasy-5.png',
+],
     testing:
       'Tested frontend-backend communication, user workflows, marketplace functionality, and order management.',
   },
@@ -94,6 +107,13 @@ export const projects = [
     stack: ['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'],
     github: 'https://github.com/prajna02/Bakery-Management-System',
     live: '',
+    screenshots: [
+  '/project-images/bakery-1.png',
+  '/project-images/bakery-2.png',
+  '/project-images/bakery-3.png',
+  '/project-images/bakery-4.png',
+  '/project-images/bakery-5.png',
+],
     testing:
       'Tested authentication, CRUD operations, shopping cart, checkout, order workflows, and backend functionality.',
   },
@@ -148,7 +168,7 @@ export const certifications = [
 ] as const
 
 export const contactIntro =
-  "I'm open to entry-level software development, AI/ML, QA, and technology opportunities."
+  "I am a recent MCA graduate looking for my first full-time role or internship in software development, AI/ML, QA, or testing. I would be grateful to connect with recruiters and teams hiring for entry-level positions."
 
 export const navLinks = [
   { href: '#about', label: 'About' },

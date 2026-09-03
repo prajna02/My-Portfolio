@@ -32,16 +32,6 @@ export function Navbar() {
               </a>
             </li>
           ))}
-          <li>
-            <a
-              className="btn btn-primary"
-              href={profile.resumePath}
-              download
-              onClick={() => setOpen(false)}
-            >
-              Download Resume
-            </a>
-          </li>
         </ul>
       </div>
     </header>

@@ -5,7 +5,6 @@ export function Experience() {
     <section className="section" id="experience">
       <div className="container">
         <div className="section-head">
-          <span className="section-index">04</span>
           <h2 className="section-title">Experience</h2>
         </div>
         <div className="timeline">

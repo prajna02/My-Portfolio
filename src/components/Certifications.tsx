@@ -5,7 +5,6 @@ export function Certifications() {
     <section className="section" id="certifications">
       <div className="container">
         <div className="section-head">
-          <span className="section-index">06</span>
           <h2 className="section-title">Certifications & Achievements</h2>
         </div>
         <ul className="cert-list">

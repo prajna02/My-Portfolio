@@ -5,7 +5,6 @@ export function About() {
     <section className="section" id="about">
       <div className="container">
         <div className="section-head">
-          <span className="section-index">01</span>
           <h2 className="section-title">About</h2>
         </div>
         {about.paragraphs.map((paragraph) => (
