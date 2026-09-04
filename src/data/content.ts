@@ -6,7 +6,7 @@ export const profile = {
   email: 'prajnakaniya02@gmail.com',
   linkedin: 'https://www.linkedin.com/in/prajna-k-254b6b354/',
   github: 'https://github.com/prajna02',
-  resumePath: '/resume.pdf',
+  resumePath: '/Prajna_K_Resume.pdf',
   photo: '/profile.jpeg',
 } as const
 
