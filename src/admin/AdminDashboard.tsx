@@ -10,7 +10,7 @@ type ContactMessage = {
   created_at: string
 }
 
-const API_URL = 'http://localhost:5000'
+const API_URL = 'https://my-portfolio-c4b8.onrender.com'
 
 export function AdminDashboard() {
   const navigate = useNavigate()
