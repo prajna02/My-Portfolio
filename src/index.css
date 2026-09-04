@@ -599,7 +599,13 @@ a {
 
 /* Experience / education */
 .timeline {
-  border-left: 2px solid var(--line);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 34%, var(--line)),
+    var(--line) 24%,
+    color-mix(in srgb, var(--accent) 20%, var(--line)) 78%,
+    var(--line)
+  ) left 13px / 2px calc(100% - 13px) no-repeat;
   padding-left: 24px;
   display: grid;
   gap: 28px;
@@ -616,8 +622,10 @@ a {
   height: 10px;
   border-radius: 50%;
   background: var(--accent);
-  left: -30px;
+  left: -28px;
   top: 8px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 2px 7px rgba(59, 74, 140, 0.18);
 }
 
 .meta {
@@ -830,7 +838,8 @@ a {
 
 .footer-inner {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
   color: var(--ink-soft);
@@ -839,6 +848,7 @@ a {
 
 .footer-links {
   display: flex;
+  justify-content: center;
   gap: 16px;
 }
 
@@ -1065,6 +1075,11 @@ a {
 }
 
 @media (max-width: 860px) {
+  .section-head {
+    justify-content: center;
+    text-align: center;
+  }
+
   .hero-grid,
   .project-card,
   .edu-grid,
@@ -1074,7 +1089,18 @@ a {
   }
 
   .photo-wrap {
-    justify-self: start;
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+    order: -1;
+  }
+
+  .hero-grid > div:first-child {
+    text-align: center;
+  }
+
+  .hero-grid .btn-row {
+    justify-content: center;
   }
 
   .nav-toggle {

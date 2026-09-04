@@ -66,9 +66,7 @@ export function Contact() {
           <div className="contact-actions">
             <a
               className="btn btn-primary"
-              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}`}
-              target="_blank"
-              rel="noreferrer"
+              href={`mailto:${profile.email}`}
             >
               Get in Touch
             </a>

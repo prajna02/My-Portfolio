@@ -4,7 +4,7 @@ export const profile = {
   bio: 'Passionate about building practical software solutions and applying technology to solve real-world problems.',
   location: 'Puttur, Karnataka, India',
   email: 'prajnakaniya02@gmail.com',
-  linkedin: 'https://linkedin.com/in/prajna-k',
+  linkedin: 'https://www.linkedin.com/in/prajna-k-254b6b354/',
   github: 'https://github.com/prajna02',
   resumePath: '/resume.pdf',
   photo: '/profile.jpeg',
@@ -19,11 +19,11 @@ export const about = {
 export const skillGroups = [
   {
     category: 'Programming',
-    items: ['Python', 'JavaScript'],
+    items: ['Python', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3'],
   },
   {
-    category: 'Web',
-    items: ['HTML5', 'CSS3', 'Bootstrap', 'Flask', 'Django'],
+    category: 'Frameworks & Libraries',
+    items: ['React', 'Flask', 'Django', 'Bootstrap'],
   },
   {
     category: 'Data & ML',
@@ -34,14 +34,15 @@ export const skillGroups = [
     items: ['SQL', 'MySQL', 'SQLite'],
   },
   {
-    category: 'Development Tools',
+    category: 'Tools',
     items: [
       'Git',
       'GitHub',
       'VS Code',
       'Cursor',
+      'Vite',
       'Google Colab',
-      'Jupyter Notebook',
+      'Jupyter',
       'XAMPP',
       'Excel',
     ],
