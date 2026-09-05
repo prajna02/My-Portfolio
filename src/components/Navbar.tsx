@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { navLinks, profile } from '../data/content'
+import { navLinks } from '../data/content'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
