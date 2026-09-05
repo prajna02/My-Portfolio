@@ -7,7 +7,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/prajna-k-254b6b354/',
   github: 'https://github.com/prajna02',
   resumePath: '/Prajna_K_Resume.pdf',
-  photo: '/profile.jpeg',
+  photo: '/profile.jpg',
 } as const
 
 export const about = {
