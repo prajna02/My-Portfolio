@@ -1,28 +1,175 @@
-import { useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type UIEvent,
+} from 'react'
 import { projects } from '../data/content'
 
 export function Projects() {
   const [activeImages, setActiveImages] = useState<Record<string, number>>({})
   const [selectedImage, setSelectedImage] = useState<{
-    src: string
-    alt: string
+    projectName: string
+    index: number
   } | null>(null)
 
-  const changeImage = (
+  const galleryRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const lightboxRef = useRef<HTMLDivElement | null>(null)
+
+  const handleGalleryScroll = (
     projectName: string,
-    direction: number,
-    total: number,
+    event: UIEvent<HTMLDivElement>,
   ) => {
-    setActiveImages((current) => {
-      const currentIndex = current[projectName] ?? 0
-      const nextIndex = (currentIndex + direction + total) % total
+    const container = event.currentTarget
+
+    if (!container.clientWidth) return
+
+    const index = Math.round(
+      container.scrollLeft / container.clientWidth,
+    )
+
+    setActiveImages((current) => ({
+      ...current,
+      [projectName]: index,
+    }))
+  }
+
+  const scrollToGalleryImage = (
+    projectName: string,
+    index: number,
+  ) => {
+    const gallery = galleryRefs.current[projectName]
+
+    if (!gallery) return
+
+    gallery.scrollTo({
+      left: index * gallery.clientWidth,
+      behavior: 'smooth',
+    })
+
+    setActiveImages((current) => ({
+      ...current,
+      [projectName]: index,
+    }))
+  }
+
+  const openLightbox = (
+    projectName: string,
+    index: number,
+  ) => {
+    setSelectedImage({
+      projectName,
+      index,
+    })
+  }
+
+  const closeLightbox = () => {
+    setSelectedImage(null)
+  }
+
+  const handleLightboxScroll = (
+    event: UIEvent<HTMLDivElement>,
+  ) => {
+    if (!selectedImage) return
+
+    const container = event.currentTarget
+
+    if (!container.clientWidth) return
+
+    const index = Math.round(
+      container.scrollLeft / container.clientWidth,
+    )
+
+    if (index === selectedImage.index) return
+
+    setSelectedImage((current) => {
+      if (!current) return current
 
       return {
         ...current,
-        [projectName]: nextIndex,
+        index,
       }
     })
   }
+
+  const scrollToLightboxImage = (index: number) => {
+    const container = lightboxRef.current
+
+    if (!container) return
+
+    container.scrollTo({
+      left: index * container.clientWidth,
+      behavior: 'smooth',
+    })
+
+    setSelectedImage((current) => {
+      if (!current) return current
+
+      return {
+        ...current,
+        index,
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (!selectedImage) return
+
+    const container = lightboxRef.current
+
+    if (!container) return
+
+    requestAnimationFrame(() => {
+      container.scrollTo({
+        left: selectedImage.index * container.clientWidth,
+        behavior: 'instant',
+      })
+    })
+  }, [selectedImage?.projectName])
+
+  useEffect(() => {
+    if (!selectedImage) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeLightbox()
+      }
+
+      if (event.key === 'ArrowLeft') {
+        const project = projects.find(
+          (item) => item.name === selectedImage.projectName,
+        )
+
+        if (!project) return
+
+        const total = project.screenshots.length
+        const previousIndex =
+          (selectedImage.index - 1 + total) % total
+
+        scrollToLightboxImage(previousIndex)
+      }
+
+      if (event.key === 'ArrowRight') {
+        const project = projects.find(
+          (item) => item.name === selectedImage.projectName,
+        )
+
+        if (!project) return
+
+        const total = project.screenshots.length
+        const nextIndex =
+          (selectedImage.index + 1) % total
+
+        scrollToLightboxImage(nextIndex)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedImage])
 
   return (
     <>
@@ -34,73 +181,67 @@ export function Projects() {
 
           <div className="project-list">
             {projects.map((project) => {
-              const currentIndex = activeImages[project.name] ?? 0
+              const currentIndex =
+                activeImages[project.name] ?? 0
 
               return (
-                <article className="project-card" key={project.name}>
+                <article
+                  className="project-card"
+                  key={project.name}
+                >
                   <div className="project-visual">
                     <div className="project-number">
                       {project.number}
                     </div>
 
-                    <div className="project-gallery">
-                      <button
-                        className="gallery-image-button"
-                        type="button"
-                        onClick={() =>
-                          setSelectedImage({
-                            src: project.screenshots[currentIndex],
-                            alt: `${project.name} screenshot ${currentIndex + 1}`,
-                          })
+                    <div className="project-gallery-wrapper">
+                      <div
+                        className="project-gallery"
+                        ref={(element) => {
+                          galleryRefs.current[project.name] =
+                            element
+                        }}
+                        onScroll={(event) =>
+                          handleGalleryScroll(
+                            project.name,
+                            event,
+                          )
                         }
-                        aria-label={`Open ${project.name} screenshot in full size`}
                       >
-                        <img
-                          className="project-shot"
-                          src={project.screenshots[currentIndex]}
-                          alt={`${project.name} screenshot ${currentIndex + 1}`}
-                        />
-                      </button>
+                        {project.screenshots.map(
+                          (screenshot, index) => (
+                            <button
+                              className="gallery-slide"
+                              type="button"
+                              key={screenshot}
+                              onClick={() =>
+                                openLightbox(
+                                  project.name,
+                                  index,
+                                )
+                              }
+                              aria-label={`Open ${project.name} screenshot ${index + 1}`}
+                            >
+                              <img
+                                className="project-shot"
+                                src={screenshot}
+                                alt={`${project.name} screenshot ${index + 1}`}
+                              />
+                            </button>
+                          ),
+                        )}
+                      </div>
 
                       {project.screenshots.length > 1 && (
-                        <>
-                          <button
-                            className="gallery-button gallery-prev"
-                            type="button"
-                            aria-label="Previous screenshot"
-                            onClick={() =>
-                              changeImage(
-                                project.name,
-                                -1,
-                                project.screenshots.length,
-                              )
-                            }
-                          >
-                            ←
-                          </button>
+                        <div className="gallery-controls">
+                          <span className="gallery-count">
+                            {currentIndex + 1} /{' '}
+                            {project.screenshots.length}
+                          </span>
 
-                          <button
-                            className="gallery-button gallery-next"
-                            type="button"
-                            aria-label="Next screenshot"
-                            onClick={() =>
-                              changeImage(
-                                project.name,
-                                1,
-                                project.screenshots.length,
-                              )
-                            }
-                          >
-                            →
-                          </button>
-
-                          <div className="gallery-controls">
-                            <span className="gallery-count">
-                              {currentIndex + 1} / {project.screenshots.length}
-                            </span>
-
-                            <div className="gallery-dots">
-                              {project.screenshots.map((_, index) => (
+                          <div className="gallery-dots">
+                            {project.screenshots.map(
+                              (_, index) => (
                                 <button
                                   key={index}
                                   className={
@@ -111,16 +252,16 @@ export function Projects() {
                                   type="button"
                                   aria-label={`Show screenshot ${index + 1}`}
                                   onClick={() =>
-                                    setActiveImages((current) => ({
-                                      ...current,
-                                      [project.name]: index,
-                                    }))
+                                    scrollToGalleryImage(
+                                      project.name,
+                                      index,
+                                    )
                                   }
                                 />
-                              ))}
-                            </div>
+                              ),
+                            )}
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -179,23 +320,90 @@ export function Projects() {
           role="dialog"
           aria-modal="true"
           aria-label="Project screenshot preview"
-          onClick={() => setSelectedImage(null)}
+          onClick={closeLightbox}
         >
           <button
             className="lightbox-close"
             type="button"
             aria-label="Close screenshot"
-            onClick={() => setSelectedImage(null)}
+            onClick={closeLightbox}
           >
             ×
           </button>
 
-          <img
-            className="lightbox-image"
-            src={selectedImage.src}
-            alt={selectedImage.alt}
+          <div
+            className="lightbox-gallery"
+            ref={lightboxRef}
+            onScroll={handleLightboxScroll}
             onClick={(event) => event.stopPropagation()}
-          />
+          >
+            {(() => {
+              const project = projects.find(
+                (item) =>
+                  item.name === selectedImage.projectName,
+              )
+
+              if (!project) return null
+
+              return project.screenshots.map(
+                (screenshot, index) => (
+                  <div
+                    className="lightbox-slide"
+                    key={screenshot}
+                  >
+                    <img
+                      className="lightbox-image"
+                      src={screenshot}
+                      alt={`${project.name} screenshot ${index + 1}`}
+                    />
+                  </div>
+                ),
+              )
+            })()}
+          </div>
+
+          {(() => {
+            const project = projects.find(
+              (item) =>
+                item.name === selectedImage.projectName,
+            )
+
+            if (!project) return null
+
+            return (
+              <div
+                className="lightbox-controls gallery-controls"
+                onClick={(event) =>
+                  event.stopPropagation()
+                }
+              >
+                <span className="gallery-count">
+                  {selectedImage.index + 1} /{' '}
+                  {project.screenshots.length}
+                </span>
+
+                <div className="gallery-dots">
+                  {project.screenshots.map(
+                    (_, index) => (
+                      <button
+                        key={index}
+                        className={
+                          index === selectedImage.index
+                            ? 'gallery-dot active'
+                            : 'gallery-dot'
+                        }
+                        type="button"
+                        aria-label={`Show screenshot ${index + 1}`}
+                        onClick={() =>
+                          scrollToLightboxImage(index)
+                        }
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+            )
+          })()}
         </div>
       )}
     </>
