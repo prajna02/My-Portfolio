@@ -40,6 +40,7 @@ ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',
     'http://127.0.0.1:5174',
     'https://my-portfolio-wheat-seven-75.vercel.app',
+    'https://prajna-k-portfolio.vercel.app',
 ]
 
 FIELD_LIMITS = {
