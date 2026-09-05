@@ -8,7 +8,7 @@ export function Navbar() {
     <header className="nav">
       <div className="container nav-inner">
         <a className="brand" href="#top">
-          {profile.name}
+          PRAJNA K
         </a>
         <button
           className="nav-toggle"
